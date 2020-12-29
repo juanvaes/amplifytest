@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample API
+  description: A sample API to illustrate OpenAPI concepts
+
+servers:
+  - url: https://example.io/v1
+
+components:
+  schemas:
+    Artist:
+      type: object
+      required:
+        - username
+      properties:
+        artist_name:
+          type: string
+        artist_genre:
+          type: string
+        albums_recorded:
+          type: integer
+        username:
+          type: string
+  parameters:
+    PageLimit:
+      name: limit
+      in: query
+      description: limits the number of items on a page
+      schema:
+        type: integer
+    PageOffset:
+      name: page
+      in: query
+      description: specifies the page number of the artists to be displayed
+      schema:
+        type: integer
+  responses:
+    400Error:
+      description: invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+paths:
+  /artists:
+    get:
+      operationId: affirm.amplifytest.services.artists.get_artists
+      description: returns a list of artists
+      parameters:
+        - $ref: '#/components/parameters/PageLimit'
+        - $ref: '#/components/parameters/PageOffset'
+      responses:
+        200: 
+          description: successfully returned a list of artists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
